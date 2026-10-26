@@ -1,4 +1,4 @@
-# Python File Handling 2
+# Python File Handling 3
  
 Python File handling
 https://drive.google.com/file/d/1sIv9rb6PizW9sfts9eVu0BkLYWLjysiT/view
@@ -17,151 +17,14 @@ https://drive.google.com/file/d/1sIv9rb6PizW9sfts9eVu0BkLYWLjysiT/view
 
 **Problem:**
 
-`names` is a list of student names and `scores` is a list of their scores, in
-the same order. Write each student to the file on its own line as
-`name,score`. The function returns nothing.
+`read_line(filename, line_number)`
 
-If the file already exists, the old content must be **replaced**, not added to.
+Return line number `line_number` (starting at 1) from the file, without the
+`"\n"` at the end.
 
-**Example:**
+You **must** use `readline()` — not `readlines()` or `read()`.
 
-    Example Input:
-        names    = ["Bat", "Saraa", "Anu"]
-        scores   = [78, 91, 65]
-        filename = "scores.txt"
-
-    File Output (scores.txt):
-        Bat,78
-        Saraa,91
-        Anu,65
-
-Note the format carefully: name, comma, score — **no spaces**.
-
-*Hint:* `write()` only accepts strings. `str(78)` turns the number 78 into
-the string `"78"`.
-
----
-
-## Exercise 2
-
-**Problem:**
-
-Every line of the file looks like `name,score`. Return the **average** score,
-rounded to 1 decimal place with `round(value, 1)`.
-
-- Skip any blank lines completely.
-- If the file has no students, return `0`.
-
-**Example:**
-
-    Example File Content (scores.txt):
-        Bat,78
-        Saraa,91
-        Anu,65
-
-    Program Output:
-        78.0
-
-    Example File Content (scores.txt):
-        Bat,70
-        Saraa,81
-
-    Program Output:
-        75.5
-
-    Example File Content (empty file):
-
-    Program Output:
-        0
-
-*Hint:* `"Saraa,91".split(",")` gives `["Saraa", "91"]`. Use `int()` on the
-second part to get the number.
-
----
-
-## Exercise 3
-
-**Problem:**
-
-Read the file `source`, where every line looks like `name,score`. Write a
-**new** file `destination` containing only the students whose score is
-`pass_mark` **or more**, in the same `name,score` format.
-Return how many students passed.
-
-The `source` file must not be changed.
-
-**Example:**
-
-    Example File Content (all.txt):
-        Bat,78
-        Saraa,91
-        Anu,45
-        Dorj,50
-
-    Example Input:
-        pass_mark = 50
-
-    File Output (passed.txt):
-        Bat,78
-        Saraa,91
-        Dorj,50
-
-    Program Output:
-        3
-
-Dorj has exactly 50 — that is a pass.
-
-*Hint:* read everything from `source` and `close()` it **before** you open
-`destination`. Two files, two `open()` calls, two `close()` calls.
-
----
-
-## Exercise 4
-
-**Problem:**
-
-Replace every `old_word` in the file with `new_word`, and save the file.
-Return how many times the word was replaced.
-
-Capital letters matter: `"cats"` does **not** match `"Cats"`.
-
-**Example:**
-
-    Example File Content (story.txt):
-        I like cats.
-        Cats are cute.
-        cats sleep a lot.
-
-    Example Input:
-        old_word = "cats"
-        new_word = "dogs"
-
-    File Content afterwards (story.txt):
-        I like dogs.
-        Cats are cute.
-        dogs sleep a lot.
-
-    Program Output:
-        2
-
-*Hint:* read the whole file with `read()`, `close()` it, then open it again
-in `"w"` mode to write the new text. If you open it with `"w"` first, the file
-is **erased** before you can read it!
-
-`"red red".count("red")` gives `2`, and `"red red".replace("red", "blue")`
-gives `"blue blue"`.
-
----
-
-## Exercise 5
-
-**Problem:**
-
-Remove line number `line_number` (starting at 1) from the file, and save the
-file. Return `True` if the line was removed.
-
-If the file has no line with that number, do **not** change the file, and
-return `False`.
+If the file does not have that line (or `line_number` is 0 or less), return `""`.
 
 **Example:**
 
@@ -169,33 +32,174 @@ return `False`.
         Mon
         Tue
         Wed
-        Thu
 
     Example Input:
         line_number = 2
 
-    File Content afterwards (days.txt):
-        Mon
-        Wed
-        Thu
+    Program Output:
+        "Tue"
+
+    Example Input:
+        line_number = 4
+
+    Program Output:
+        ""
+
+*Hint:* every time you call `readline()` it gives you the **next** line. When
+there are no lines left, it gives `""`. So to get line 2, call it 2 times.
+
+---
+
+## Exercise 2
+
+**Problem:**
+
+`reverse_lines(source, destination)`
+
+Read the file `source` and write a **new** file `destination` with the same
+lines in **reverse order** — the last line first.
+Return how many lines you wrote.
+
+The `source` file must not be changed.
+
+**Example:**
+
+    Example File Content (in.txt):
+        one
+        two
+        three
+
+    File Output (out.txt):
+        three
+        two
+        one
+
+    Program Output:
+        3
+
+*Hint:* be careful — the last line of a file sometimes has **no** `"\n"` at
+the end. `.strip()` every line, then add your own `"\n"`.
+
+---
+
+## Exercise 3
+
+**Problem:**
+
+`merge_files(first, second, destination)`
+
+Two classes each have a file of student names. Write all the names from
+`first`, then all the names from `second`, into the file `destination`.
+Return the total number of names written.
+
+If `destination` already exists, the old content must be **replaced**.
+The `first` and `second` files must not be changed.
+
+**Example:**
+
+    Example File Content (class_a.txt):
+        Bat
+        Saraa
+
+    Example File Content (class_b.txt):
+        Anu
+        Dorj
+
+    File Output (all.txt):
+        Bat
+        Saraa
+        Anu
+        Dorj
+
+    Program Output:
+        4
+
+*Hint:* three files means three `open()` calls and three `close()` calls.
+
+---
+
+## Exercise 4
+
+**Problem:**
+
+`find_score(filename, name)`
+
+Every line of the file looks like `name,score`. Use **linear search** to find
+the student called `name` and return their score as an **integer**.
+
+Return `-1` if the student is not in the file.
+Capital letters matter: `"bat"` does **not** match `"Bat"`.
+
+**Example:**
+
+    Example File Content (scores.txt):
+        Bat,78
+        Saraa,91
+        Tuguldur,65
+        Anu,88
+
+    Example Input:
+        name = "Anu"
+
+    Program Output:
+        88
+
+    Example Input:
+        name = "Dorj"
+
+    Program Output:
+        -1
+
+*Hint:* `"Anu,88".split(",")` gives `["Anu", "88"]`. Compare the first part
+with `name`, and use `int()` on the second part.
+
+---
+
+## Exercise 5
+
+**Problem:**
+
+`update_score(filename, name, new_score)`
+
+Change the score of the student called `name` to `new_score`, and save the
+file. Every other line must stay **exactly** the same.
+Return `True` if the student was found and updated.
+
+If the student is not in the file, do **not** change the file, and return `False`.
+
+**Example:**
+
+    Example File Content (scores.txt):
+        Bat,78
+        Saraa,91
+        Tuguldur,65
+        Anu,88
+
+    Example Input:
+        name      = "Saraa"
+        new_score = 95
+
+    File Content afterwards (scores.txt):
+        Bat,78
+        Saraa,95
+        Tuguldur,65
+        Anu,88
 
     Program Output:
         True
 
     Example Input:
-        line_number = 5
+        name      = "Dorj"
+        new_score = 50
 
-    File Content afterwards (days.txt):
-        Mon
-        Tue
-        Wed
-        Thu
+    File Content afterwards (scores.txt):
+        (unchanged)
 
     Program Output:
         False
 
-*Hint:* `readlines()` gives you a list — line 1 is `lines[0]`. Check the line
-number **before** you open the file in `"w"` mode, then write back every line
-except the one you are removing.
+*Hint:* read **all** the lines and `close()` the file first. Change the one
+line in your list, then open the file again with `"w"` and write every line
+back. Remember the new line needs `"\n"` at the end.
 
 ---
